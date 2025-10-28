@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Welcome to Clickii Calci 👻</title>
+<style>
+  /* Base styling */
+  body {
+    margin: 0;
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    overflow: hidden;
+    background: radial-gradient(circle at top left, #6a00ff, #1e003b 50%, #00c6ff);
+    font-family: 'Poppins', sans-serif;
+    color: white;
+  }
+
+  /* Glowing gradient lights */
+  body::before, body::after {
+    content: '';
+    position: absolute;
+    width: 700px;
+    height: 700px;
+    border-radius: 50%;
+    filter: blur(200px);
+    z-index: 0;
+  }
+
+  body::before {
+    background: rgba(0, 255, 255, 0.3);
+    top: -150px;
+    left: -200px;
+  }
+
+  body::after {
+    background: rgba(183, 0, 255, 0.3);
+    bottom: -200px;
+    right: -150px;
+  }
+
+  /* Title animation */
+  h1 {
+    font-size: 38px;
+    text-align: center;
+    letter-spacing: 1.5px;
+    background: linear-gradient(90deg, #00f7ff, #b347ff);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    animation: bounceIn 2.5s ease forwards;
+    position: relative;
+    z-index: 2;
+  }
+
+  @keyframes bounceIn {
+    0% { transform: scale(0.5); opacity: 0; }
+    50% { transform: scale(1.2); opacity: 1; }
+    100% { transform: scale(1); }
+  }
+
+  /* Ghost marquee section */
+  marquee {
+    margin-top: 5px;
+    font-size: 20px;
+    font-weight: 500;
+    z-index: 2;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  .ghost {
+    font-size: 30px;
+    display: inline-block;
+    animation: float 2s ease-in-out infinite;
+  }
+
+  @keyframes float {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-10px); }
+  }
+
+  /* Ghosts floating around background */
+  .floating-ghost {
+    position: absolute;
+    font-size: 30px;
+    opacity: 0.4;
+    animation: drift 15s linear infinite;
+    z-index: 1;
+  }
+
+  .floating-ghost:nth-child(1) { top: 10%; left: 5%; animation-delay: 0s; }
+  .floating-ghost:nth-child(2) { top: 60%; left: 80%; animation-delay: 3s; }
+  .floating-ghost:nth-child(3) { top: 70%; left: 20%; animation-delay: 6s; }
+
+  @keyframes drift {
+    0% { transform: translateY(0) rotate(0deg); }
+    50% { transform: translateY(-30px) rotate(10deg); }
+    100% { transform: translateY(0) rotate(-10deg); }
+  }
+
+  /* Button section */
+  .buttons {
+    margin-top: 40px;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    align-items: center;
+    z-index: 2;
+    animation: fadeIn 3s ease forwards;
+  }
+
+  @keyframes fadeIn {
+    0% { opacity: 0; transform: translateY(30px); }
+    100% { opacity: 1; transform: translateY(0); }
+  }
+
+  button {
+    width: 280px;
+    height: 55px;
+    border: none;
+    border-radius: 18px;
+    background: rgba(255, 255, 255, 0.15);
+    color: white;
+    font-size: 18px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: 0.25s ease;
+    backdrop-filter: blur(15px);
+    box-shadow: 0 0 15px rgba(255, 255, 255, 0.15);
+  }
+
+  button:hover {
+    background: linear-gradient(135deg, #8a2be2, #00c6ff);
+    box-shadow: 0 0 25px rgba(140, 50, 255, 0.6);
+    transform: scale(1.07) rotate(-1deg);
+  }
+
+  /* Wiggle effect on hover */
+  button:hover::after {
+    content: '✨';
+    margin-left: 8px;
+    animation: sparkle 0.5s ease;
+  }
+
+  @keyframes sparkle {
+    0% { opacity: 0; transform: scale(0.5); }
+    100% { opacity: 1; transform: scale(1.2); }
+  }
+
+</style>
+</head>
+<body>
+
+<!-- Floating background ghosts -->
+<span class="floating-ghost">👻</span>
+<span class="floating-ghost">👻</span>
+<span class="floating-ghost">👻</span>
+
+<!-- Main content -->
+<h1>Welcome to Harshi's Clickii Calci </h1>
+
+  <span class="ghost">👻</span> Hey there! I’m Clickii the Friendly Ghost — ready to crunch some fun numbers with you! <span class="ghost"></span>
+
+
+<div class="buttons">
+  <button onclick="window.location.href='calculator.html'" choice="calc" value="arith">🧮 Simple Arithmetic Calculation</button>
+  <button onclick="window.location.href='currency.html'" choice="curren" value="curren">💱 Currency Conversion</button>
+  </div>
+
+</body>
+</html>

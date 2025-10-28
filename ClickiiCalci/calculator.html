@@ -1,0 +1,268 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Clickii Calci 👻</title>
+<style>
+  /* ===== BACKGROUND MAGIC ===== */
+  body {
+    margin: 0;
+    height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background: radial-gradient(circle at top left, #6a00ff, #1e003b 50%, #00c6ff);
+    font-family: "Poppins", sans-serif;
+    overflow: hidden;
+    position: relative;
+  }
+
+  /* Glowy lights behind */
+  body::before, body::after {
+    content: '';
+    position: absolute;
+    width: 800px;
+    height: 800px;
+    border-radius: 50%;
+    filter: blur(200px);
+    z-index: 0;
+  }
+
+  body::before {
+    top: -150px;
+    left: -200px;
+    background: rgba(0, 255, 255, 0.3);
+  }
+
+  body::after {
+    bottom: -200px;
+    right: -150px;
+    background: rgba(183, 0, 255, 0.3);
+  }
+
+  /* ===== FLOATING GHOST ===== */
+  .floating-ghost {
+    position: absolute;
+    font-size: 60px;
+    animation: float 4s ease-in-out infinite;
+    top: 12%;
+    left: 15%;
+    z-index: 2;
+    opacity: 0.8;
+  }
+
+  @keyframes float {
+    0%, 100% { transform: translateY(0) rotate(0deg); }
+    50% { transform: translateY(-15px) rotate(10deg); }
+  }
+
+  /* ===== CALCULATOR ===== */
+  #clkii {
+    position: relative;
+    z-index: 3;
+    width: 320px;
+    padding: 25px 20px 30px 20px;
+    border-radius: 25px;
+    background: rgba(255, 255, 255, 0.15);
+    box-shadow: 0 8px 40px rgba(0, 0, 0, 0.35);
+    backdrop-filter: blur(20px);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    text-align: center;
+    animation: fadeIn 1.5s ease;
+  }
+
+  @keyframes fadeIn {
+    from { opacity: 0; transform: translateY(50px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  /* Display box */
+  #displayBox {
+    width: 96%;
+    height: 90px;
+    border-radius: 15px;
+    background: rgba(255, 255, 255, 0.07);
+    color: #fff;
+    padding: 10px;
+    text-align: right;
+    overflow: hidden;
+    box-shadow: inset 0 0 10px rgba(255,255,255,0.1);
+  }
+
+  #expression {
+    font-size: 16px;
+    opacity: 0.7;
+  }
+
+  #result {
+    font-size: 28px;
+    font-weight: 600;
+  }
+
+  /* Buttons grid */
+  .buttons {
+    margin-top: 20px;
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 12px;
+  }
+
+  button {
+    height: 60px;
+    border: none;
+    border-radius: 18px;
+    font-size: 18px;
+    font-weight: 600;
+    color: #fff;
+    cursor: pointer;
+    transition: all 0.25s ease;
+    background: rgba(255, 255, 255, 0.18);
+    backdrop-filter: blur(10px);
+    box-shadow: 0 0 10px rgba(255,255,255,0.1);
+  }
+
+  button:hover {
+    background: rgba(255, 255, 255, 0.3);
+    transform: scale(1.07);
+  }
+
+  .operator {
+    background: rgba(255, 255, 255, 0.25);
+  }
+
+  .equal {
+    background: linear-gradient(135deg, #8a2be2, #00c6ff);
+    box-shadow: 0 0 15px rgba(140, 50, 255, 0.6);
+    transition: 0.3s;
+  }
+
+  .equal:hover {
+    background: linear-gradient(135deg, #b347ff, #00e0ff);
+    transform: scale(1.1);
+    box-shadow: 0 0 25px rgba(183, 0, 255, 0.6);
+  }
+
+  /* Floating sparkles */
+  .sparkle {
+    position: absolute;
+    width: 8px;
+    height: 8px;
+    background: white;
+    border-radius: 50%;
+    animation: sparkleAnim 4s linear infinite;
+    opacity: 0.7;
+  }
+
+  @keyframes sparkleAnim {
+    0% { transform: translateY(0); opacity: 0.8; }
+    50% { transform: translateY(-50px); opacity: 0.2; }
+    100% { transform: translateY(0); opacity: 0.8; }
+  }
+
+  /* Reaction bubble */
+  #ghostReaction {
+    position: absolute;
+    top: 5%;
+    left: 25%;
+    font-size: 18px;
+    background: rgba(255,255,255,0.15);
+    padding: 8px 15px;
+    border-radius: 15px;
+    backdrop-filter: blur(10px);
+    box-shadow: 0 0 15px rgba(255,255,255,0.1);
+    opacity: 0;
+    transition: all 0.4s ease;
+  }
+
+  #ghostReaction.show {
+    opacity: 1;
+    transform: translateY(-10px);
+  }
+
+</style>
+</head>
+<body>
+
+<!-- Floating ghost -->
+<div class="floating-ghost">👻</div>
+<div id="ghostReaction">Boo! Nice calculation 👻</div>
+
+<!-- Sparkles -->
+<div class="sparkle" style="top: 15%; left: 70%; animation-delay: 0s;"></div>
+<div class="sparkle" style="top: 70%; left: 20%; animation-delay: 1s;"></div>
+<div class="sparkle" style="top: 50%; left: 90%; animation-delay: 2s;"></div>
+
+<!-- Calculator -->
+<div id="clkii">
+  <div id="displayBox">
+    <div id="expression"></div>
+    <div id="result">0</div>
+  </div>
+  <div class="buttons">
+    <button onclick="clearDisplay()">C</button>
+    <button class="operator" onclick="appendValue('/')">÷</button>
+    <button class="operator" onclick="appendValue('*')">×</button>
+    <button class="operator" onclick="backspace()">⌫</button>
+
+    <button onclick="appendValue('7')">7</button>
+    <button onclick="appendValue('8')">8</button>
+    <button onclick="appendValue('9')">9</button>
+    <button class="operator" onclick="appendValue('-')">−</button>
+
+    <button onclick="appendValue('4')">4</button>
+    <button onclick="appendValue('5')">5</button>
+    <button onclick="appendValue('6')">6</button>
+    <button class="operator" onclick="appendValue('+')">+</button>
+
+    <button onclick="appendValue('1')">1</button>
+    <button onclick="appendValue('2')">2</button>
+    <button onclick="appendValue('3')">3</button>
+    <button class="operator" onclick="appendValue('(')">(</button>
+
+    <button onclick="appendValue('0')">0</button>
+    <button onclick="appendValue('.')">.</button>
+    <button class="operator" onclick="appendValue(')')">)</button>
+    <button class="equal" onclick="calculate()">=</button>
+  </div>
+</div>
+
+<script>
+  const expressionBox = document.getElementById('expression');
+  const resultBox = document.getElementById('result');
+  const ghostReaction = document.getElementById('ghostReaction');
+
+  function appendValue(val) {
+    expressionBox.textContent += val;
+  }
+
+  function clearDisplay() {
+    expressionBox.textContent = '';
+    resultBox.textContent = '0';
+  }
+
+  function backspace() {
+    expressionBox.textContent = expressionBox.textContent.slice(0, -1);
+  }
+
+  function calculate() {
+    try {
+      let expr = expressionBox.textContent;
+      let result = eval(expr);
+      resultBox.textContent = result.toLocaleString('en-US');
+
+      // Ghost reacts playfully
+      ghostReaction.textContent = "Hehe! 👻 Smart one!";
+      ghostReaction.classList.add("show");
+      setTimeout(() => ghostReaction.classList.remove("show"), 1800);
+    } catch {
+      resultBox.textContent = 'Error';
+      ghostReaction.textContent = "Oops! 💀 Try again!";
+      ghostReaction.classList.add("show");
+      setTimeout(() => ghostReaction.classList.remove("show"), 1800);
+    }
+  }
+</script>
+
+</body>
+</html>

@@ -1,0 +1,243 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Clickii Currency Converter 💱</title>
+<style>
+  /* Animated glowing gradient background */
+  body {
+    margin: 0;
+    height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background: radial-gradient(circle at top left, #6a00ff, #1e003b 50%, #00c6ff);
+    background-size: 200% 200%;
+    animation: gradientShift 10s ease infinite;
+    font-family: 'Poppins', sans-serif;
+    color: #fff;
+    overflow: hidden;
+  }
+
+  @keyframes gradientShift {
+    0% { background-position: 0% 0%; }
+    50% { background-position: 100% 100%; }
+    100% { background-position: 0% 0%; }
+  }
+
+  /* Floating light glow */
+  body::before, body::after {
+    content: '';
+    position: absolute;
+    width: 600px;
+    height: 600px;
+    border-radius: 50%;
+    filter: blur(200px);
+    z-index: 0;
+  }
+
+  body::before {
+    background: rgba(0, 255, 255, 0.25);
+    top: -100px;
+    left: -150px;
+  }
+
+  body::after {
+    background: rgba(183, 0, 255, 0.25);
+    bottom: -150px;
+    right: -150px;
+  }
+
+  /* Floating ghost elements */
+  .floating-ghost {
+    position: absolute;
+    font-size: 30px;
+    opacity: 0.5;
+    animation: drift 15s ease-in-out infinite;
+    z-index: 1;
+  }
+  .floating-ghost:nth-child(1) { top: 8%; left: 8%; animation-delay: 0s; }
+  .floating-ghost:nth-child(2) { top: 70%; right: 10%; animation-delay: 4s; }
+  .floating-ghost:nth-child(3) { bottom: 15%; left: 30%; animation-delay: 8s; }
+
+  @keyframes drift {
+    0%, 100% { transform: translateY(0) rotate(0deg); }
+    50% { transform: translateY(-25px) rotate(10deg); }
+  }
+
+  /* Glassy converter box */
+  #clkii {
+    position: relative;
+    width: 340px;
+    padding: 30px;
+    background: rgba(255, 255, 255, 0.12);
+    border-radius: 25px;
+    box-shadow: 0 8px 40px rgba(255, 255, 255, 0.2);
+    backdrop-filter: blur(20px);
+    border: 1px solid rgba(255, 255, 255, 0.25);
+    text-align: center;
+    z-index: 2;
+    animation: fadeIn 1.8s ease;
+  }
+
+  @keyframes fadeIn {
+    from { opacity: 0; transform: translateY(30px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  h2 {
+    font-size: 24px;
+    font-weight: 600;
+    margin-bottom: 25px;
+    background: linear-gradient(90deg, #00f7ff, #b347ff);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    text-shadow: 0 0 12px rgba(255,255,255,0.2);
+  }
+
+  input, select {
+    width: 90%;
+    padding: 12px;
+    margin: 10px 0;
+    border: none;
+    border-radius: 12px;
+    background: rgba(255, 255, 255, 0.2);
+    color: white;
+    font-size: 16px;
+    outline: none;
+    text-align: center;
+    transition: all 0.3s ease;
+    box-shadow: inset 0 0 8px rgba(255, 255, 255, 0.15);
+  }
+
+  input:hover, select:hover {
+    background: rgba(255, 255, 255, 0.3);
+  }
+
+  input::placeholder {
+    color: rgba(255, 255, 255, 0.6);
+  }
+
+  select option {
+    background: #2a005e;
+    color: #fff;
+  }
+
+  /* Convert button */
+  button {
+    width: 95%;
+    padding: 12px;
+    margin-top: 15px;
+    border: none;
+    border-radius: 15px;
+    background: linear-gradient(135deg, #8a2be2, #00c6ff);
+    color: #fff;
+    font-size: 18px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    box-shadow: 0 0 20px rgba(140, 50, 255, 0.3);
+  }
+
+  button:hover {
+    background: linear-gradient(135deg, #00c6ff, #8a2be2);
+    transform: scale(1.05);
+    box-shadow: 0 0 25px rgba(255, 255, 255, 0.6);
+  }
+
+  /* Result display */
+  #result {
+    margin-top: 20px;
+    font-size: 20px;
+    font-weight: bold;
+    opacity: 0;
+    transform: translateY(15px);
+    transition: all 0.4s ease;
+  }
+
+  #result.show {
+    opacity: 1;
+    transform: translateY(0);
+  }
+
+  /* Back button */
+  .back-btn {
+    display: inline-block;
+    margin-top: 20px;
+    font-size: 16px;
+    color: #fff;
+    text-decoration: none;
+    opacity: 0.8;
+    transition: 0.3s;
+  }
+
+  .back-btn:hover {
+    opacity: 1;
+    text-shadow: 0 0 10px #00e6ff;
+  }
+</style>
+</head>
+<body>
+
+<!-- Floating background ghosts -->
+<span class="floating-ghost">👻</span>
+<span class="floating-ghost">👻</span>
+<span class="floating-ghost">👻</span>
+
+<div id="clkii">
+  <h2>💱 Clickii Currency Converter</h2>
+
+  <input type="number" id="amount" placeholder=" Enter amount " />
+  
+  <select id="fromCurrency">
+    <option value="INR">INR (₹)</option>
+    <option value="USD">USD ($)</option>
+    <option value="EUR">EUR (€)</option>
+    <option value="GBP">GBP (£)</option>
+  </select>
+
+  <select id="toCurrency">
+    <option value="USD">USD ($)</option>
+    <option value="INR">INR (₹)</option>
+    <option value="EUR">EUR (€)</option>
+    <option value="GBP">GBP (£)</option>
+  </select>
+
+  <button onclick="convertCurrency()">Convert</button>
+
+  <div id="result"></div>
+
+  
+</div>
+
+<script>
+  const rates = {
+    "INR": { "USD": 0.012, "EUR": 0.011, "GBP": 0.0095, "INR": 1 },
+    "USD": { "INR": 83.2, "EUR": 0.93, "GBP": 0.81, "USD": 1 },
+    "EUR": { "USD": 1.08, "INR": 89.5, "GBP": 0.87, "EUR": 1 },
+    "GBP": { "USD": 1.23, "INR": 102.6, "EUR": 1.15, "GBP": 1 }
+  };
+
+  function convertCurrency() {
+    const amount = parseFloat(document.getElementById("amount").value);
+    const from = document.getElementById("fromCurrency").value;
+    const to = document.getElementById("toCurrency").value;
+    const resultDiv = document.getElementById("result");
+
+    if (isNaN(amount) || amount <= 0) {
+      resultDiv.innerText = "⚠️ Enter a valid amount!";
+      resultDiv.classList.add("show");
+      return;
+    }
+
+    const rate = rates[from][to];
+    const converted = (amount * rate).toFixed(2);
+
+    resultDiv.innerText = `${amount} ${from} = ${converted} ${to}`;
+    resultDiv.classList.add("show");
+  }
+</script>
+
+</body>
+</html>
